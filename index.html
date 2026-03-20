@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <title>Трансформация и анимация</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="http://d3js.org/d3.v7.min.js"></script>
+  <script src="js/image.js" type="module"></script>
+  <script src="js/path.js" type="module"></script>
+  <script src="js/animation.js" type="module"></script>
+  <script src="js/main.js" defer type="module"></script>
+</head>
+
+<body>
+
+  <form id="setting">
+    <p>
+      <label for="duration">Время анимации (мс): </label>
+      <input type="number" id="duration" value="5000" min="500" max="30000" step="500">
+    </p>
+
+    <p>
+      <label for="animation-type">Тип анимации: </label>
+      <select id="animation-type">
+        <option value="linear">Linear</option>
+        <option value="ease" selected>Ease</option>
+        <option value="bounce">Bounce</option>
+        <option value="elastic">Elastic</option>
+      </select>
+    </p>
+
+    <p id="scale-wrapper">
+      <span>Масштабирование при движении</span><br>
+      <label for="scale-from">От: </label>
+      <input type="number" id="scale-from" value="1" min="0.1" max="5" step="0.1">
+      <label for="scale-to">До: </label>
+      <input type="number" id="scale-to" value="1.5" min="0.1" max="5" step="0.1">
+    </p>
+
+    <p id="rotation-wrapper">
+      <span>Вращение при движении</span><br>
+      <label for="rotate-from">От (°): </label>
+      <input type="number" id="rotate-from" value="0" min="0" max="3600" step="10">
+      <label for="rotate-to">До (°): </label>
+      <input type="number" id="rotate-to" value="720" min="0" max="3600" step="10">
+    </p>
+
+    <p>
+      <label for="show-path">Показать траекторию</label>
+      <input type="checkbox" id="show-path">
+    </p>
+
+    <p>
+      <label for="direction">Направление: </label>
+      <select id="direction">
+        <option value="left" selected>Слева направо</option>
+        <option value="right">Справа налево</option>
+      </select>
+    </p>
+
+    <p>
+      <input type="button" id="animate-button" value="Анимировать">
+      <input type="button" id="clear-button" value="Очистить">
+    </p>
+  </form>
+
+  <svg></svg>
+
+</body>
+
+</html>
