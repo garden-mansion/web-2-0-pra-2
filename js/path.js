@@ -1,14 +1,8 @@
-// Парабола с ветвями вниз: y = -a*(x - h)^2 + k
-// Параметрическая форма: x(t) = t, y(t) = -a*(t-h)^2 + k
-// где (h, k) — вершина параболы, a — коэффициент раскрытости параборы
-
-export const createParabolaPath = (width, height, direction) => {
+export function createParabolaPath(width, height, direction) {
   const data = [];
-
-  const h = width / 2;   
-  const k = 80;          
+  const h = width / 2;
+  const k = 80;
   const padding = 60;
-
   const a = (k - (height - padding)) / Math.pow(padding - h, 2);
 
   const steps = 200;
@@ -29,7 +23,7 @@ export const createParabolaPath = (width, height, direction) => {
   return data;
 }
 
-export const drawPath = (width, height, direction, visible) => {
+export function drawPath(width, height, direction, visible) {
   const dataPoints = createParabolaPath(width, height, direction);
 
   const line = d3.line()
@@ -48,26 +42,4 @@ export const drawPath = (width, height, direction, visible) => {
     .attr('fill', 'none');
 
   return path;
-}
-
-export const translateAlong = (path) => {
-  const length = path.getTotalLength();
-  return () => {
-    return (t) => {
-      const { x, y } = path.getPointAtLength(t * length);
-      return `translate(${x},${y})`;
-    };
-  };
-}
-
-export const transformAlong = (path, scaleFrom, scaleTo, rotateFrom, rotateTo) => {
-  const length = path.getTotalLength();
-  return () => {
-    return (t) => {
-      const { x, y } = path.getPointAtLength(t * length);
-      const currentScale = scaleFrom + (scaleTo - scaleFrom) * t;
-      const currentRotate = rotateFrom + (rotateTo - rotateFrom) * t;
-      return `translate(${x},${y}) scale(${currentScale}) rotate(${currentRotate})`;
-    };
-  };
 }
