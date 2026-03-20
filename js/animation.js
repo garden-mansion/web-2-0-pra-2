@@ -1,7 +1,7 @@
 import { drawHouse, clear } from './image.js';
 import { drawPath, transformAlong } from './path.js';
 
-export function getEaseFunction(type) {
+export const getEaseFunction = (type) => {
   switch (type) {
     case 'linear':
       return d3.easeLinear;
@@ -16,12 +16,11 @@ export function getEaseFunction(type) {
   }
 }
 
-export function runAnimation() {
+export const runAnimation = () => {
   const svg = d3.select("svg");
   const width = +svg.attr("width");
   const height = +svg.attr("height");
 
-  // Считываем параметры из формы через D3
   const duration = +d3.select('#duration').property('value');
   const animationType = d3.select('#animation-type').property('value');
   const scaleFrom = +d3.select('#scale-from').property('value');
@@ -31,19 +30,14 @@ export function runAnimation() {
   const showPath = d3.select('#show-path').property('checked');
   const direction = d3.select('#direction').property('value');
 
-  // Очищаем предыдущую анимацию
   clear(svg);
 
-  // Рисуем траекторию
   const path = drawPath(width, height, direction, showPath);
 
-  // Рисуем домик
   const pict = drawHouse(svg);
 
-  // Получаем функцию плавности
   const ease = getEaseFunction(animationType);
 
-  // Запускаем анимацию с комбинированной трансформацией
   pict.transition()
     .duration(duration)
     .ease(ease)

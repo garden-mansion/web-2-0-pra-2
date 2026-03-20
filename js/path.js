@@ -1,19 +1,14 @@
 // Парабола с ветвями вниз: y = -a*(x - h)^2 + k
 // Параметрическая форма: x(t) = t, y(t) = -a*(t-h)^2 + k
-// где (h, k) — вершина параболы, a — коэффициент «раскрытости»
+// где (h, k) — вершина параболы, a — коэффициент раскрытости параборы
 
-export function createParabolaPath(width, height, direction) {
+export const createParabolaPath = (width, height, direction) => {
   const data = [];
 
-  // Вершина параболы — верхняя центральная часть SVG
-  const h = width / 2;   // x вершины — центр по горизонтали
-  const k = 80;          // y вершины — ближе к верху
+  const h = width / 2;   
+  const k = 80;          
   const padding = 60;
 
-  // Коэффициент a подбираем так, чтобы парабола при x = padding
-  // опускалась примерно до height - padding
-  // y(padding) = -a*(padding - h)^2 + k = height - padding
-  // => a = (k - (height - padding)) / (padding - h)^2
   const a = (k - (height - padding)) / Math.pow(padding - h, 2);
 
   const steps = 200;
@@ -27,7 +22,6 @@ export function createParabolaPath(width, height, direction) {
     data.push({ x, y });
   }
 
-  // Если направление справа налево — переворачиваем массив
   if (direction === 'right') {
     data.reverse();
   }
@@ -35,7 +29,7 @@ export function createParabolaPath(width, height, direction) {
   return data;
 }
 
-export function drawPath(width, height, direction, visible) {
+export const drawPath = (width, height, direction, visible) => {
   const dataPoints = createParabolaPath(width, height, direction);
 
   const line = d3.line()
@@ -56,21 +50,20 @@ export function drawPath(width, height, direction, visible) {
   return path;
 }
 
-export function translateAlong(path) {
+export const translateAlong = (path) => {
   const length = path.getTotalLength();
-  return function () {
-    return function (t) {
+  return () => {
+    return (t) => {
       const { x, y } = path.getPointAtLength(t * length);
       return `translate(${x},${y})`;
     };
   };
 }
 
-// Комбинированная интерполяция: перемещение + масштаб + вращение
-export function transformAlong(path, scaleFrom, scaleTo, rotateFrom, rotateTo) {
+export const transformAlong = (path, scaleFrom, scaleTo, rotateFrom, rotateTo) => {
   const length = path.getTotalLength();
-  return function () {
-    return function (t) {
+  return () => {
+    return (t) => {
       const { x, y } = path.getPointAtLength(t * length);
       const currentScale = scaleFrom + (scaleTo - scaleFrom) * t;
       const currentRotate = rotateFrom + (rotateTo - rotateFrom) * t;
