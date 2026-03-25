@@ -1,4 +1,4 @@
-export function createParabolaPath(width, height, direction) {
+export function createParabolaPath(width, height) {
   const data = [];
   const h = width / 2;
   const k = 80;
@@ -16,15 +16,11 @@ export function createParabolaPath(width, height, direction) {
     data.push({ x, y });
   }
 
-  if (direction === 'right') {
-    data.reverse();
-  }
-
   return data;
 }
 
-export function drawPath(width, height, direction, visible) {
-  const dataPoints = createParabolaPath(width, height, direction);
+export function drawPath(width, height, visible) {
+  const dataPoints = createParabolaPath(width, height);
 
   const line = d3.line()
     .x(d => d.x)
