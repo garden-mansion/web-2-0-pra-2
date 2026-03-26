@@ -19,7 +19,7 @@ export function createParabolaPath(width, height) {
   return data;
 }
 
-export function drawPath(width, height, visible) {
+export function drawPath(width, height) {
   const dataPoints = createParabolaPath(width, height);
 
   const line = d3.line()
@@ -32,10 +32,20 @@ export function drawPath(width, height, visible) {
   const path = svg.append('path')
     .attr('class', 'trajectory')
     .attr('d', line(dataPoints))
-    .attr('stroke', visible ? '#999' : 'none')
-    .attr('stroke-width', visible ? 2 : 0)
-    .attr('stroke-dasharray', visible ? '8,4' : '0')
+    .attr('stroke', 'none')
     .attr('fill', 'none');
 
   return path;
+}
+
+export function translateAlong(path, scaleFrom, scaleTo, rotateFrom, rotateTo) {
+  const length = path.getTotalLength();
+  return function () {
+    return function (t) {
+      const { x, y } = path.getPointAtLength(t * length);
+      const scale = scaleFrom + (scaleTo - scaleFrom) * t;
+      const rotate = rotateFrom + (rotateTo - rotateFrom) * t;
+      return `translate(${x}, ${y}) scale(${scale}) rotate(${rotate})`;
+    }
+  }
 }

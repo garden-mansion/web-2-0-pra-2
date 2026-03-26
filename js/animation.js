@@ -1,5 +1,5 @@
 import { drawHouse, clear } from './image.js';
-import { drawPath } from './path.js';
+import { drawPath, translateAlong } from './path.js';
 
 function getEaseFunction(type) {
   switch (type) {
@@ -26,27 +26,11 @@ export function runAnimation() {
   clear(svg);
 
   const path = drawPath(width, height);
-  const pathNode = path.node();
-  const pathLength = pathNode.getTotalLength();
-
   const pict = drawHouse(svg);
   const ease = getEaseFunction(animationType);
 
-  d3.timer(function (elapsed) {
-    let t = elapsed / duration;
-    if (t > 1) t = 1;
-
-    const easedT = ease(t);
-
-    const point = pathNode.getPointAtLength(easedT * pathLength);
-
-    const scale = scaleFrom + (scaleTo - scaleFrom) * easedT;
-    const rotate = rotateFrom + (rotateTo - rotateFrom) * easedT;
-
-    pict.attr("transform",
-      `translate(${point.x}, ${point.y}) scale(${scale}) rotate(${rotate})`
-    );
-
-    if (t >= 1) return true;
-  });
+  pict.transition()
+    .duration(duration)
+    .ease(ease)
+    .attrTween('transform', translateAlong(path.node(), scaleFrom, scaleTo, rotateFrom, rotateTo));
 }
